@@ -11,6 +11,10 @@ const UserSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  password: {
+    type: String,
+    required: true
+  },
   mobileNumber: {
     type: String,
     required: true,
@@ -32,8 +36,7 @@ const UserSchema = new mongoose.Schema({
 /**
  * Methods
  */
-UserSchema.method({
-});
+UserSchema.method({});
 
 /**
  * Statics

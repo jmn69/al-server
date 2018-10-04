@@ -2,17 +2,21 @@ const express = require('express');
 const validate = require('express-validation');
 const paramValidation = require('../../config/param-validation');
 const userCtrl = require('./user.controller');
+const authenticate = require('../oauth/authenticate');
 
 const router = express.Router(); // eslint-disable-line new-cap
 
-router.route('/')
+router.all('*', authenticate());
+router
+  .route('/')
   /** GET /api/users - Get list of users */
   .get(userCtrl.list)
 
   /** POST /api/users - Create new user */
   .post(validate(paramValidation.createUser), userCtrl.create);
 
-router.route('/:userId')
+router
+  .route('/:userId')
   /** GET /api/users/:userId - Get user */
   .get(userCtrl.get)
 

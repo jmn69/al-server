@@ -1,5 +1,16 @@
 const User = require('./user.model');
 
+function getUserByCredentials(username, password) {
+  return User.findOne({ username })
+    .then((user) => {
+      console.log('u', user);
+      return user.password === password ? user : false;
+    })
+    .catch((err) => {
+      console.log('getUser - Err: ', err);
+    });
+}
+
 /**
  * Load user and append to req.
  */
@@ -32,7 +43,8 @@ function create(req, res, next) {
     mobileNumber: req.body.mobileNumber
   });
 
-  user.save()
+  user
+    .save()
     .then(savedUser => res.json(savedUser))
     .catch(e => next(e));
 }
@@ -48,7 +60,8 @@ function update(req, res, next) {
   user.username = req.body.username;
   user.mobileNumber = req.body.mobileNumber;
 
-  user.save()
+  user
+    .save()
     .then(savedUser => res.json(savedUser))
     .catch(e => next(e));
 }
@@ -72,9 +85,10 @@ function list(req, res, next) {
  */
 function remove(req, res, next) {
   const user = req.user;
-  user.remove()
+  user
+    .remove()
     .then(deletedUser => res.json(deletedUser))
     .catch(e => next(e));
 }
 
-module.exports = { load, get, create, update, list, remove };
+module.exports = { load, get, create, update, list, remove, getUserByCredentials };
