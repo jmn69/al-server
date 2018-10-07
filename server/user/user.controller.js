@@ -2,12 +2,13 @@ const User = require('./user.model');
 
 function getUserByCredentials(username, password) {
   return User.findOne({ username })
-    .then((user) => {
-      console.log('u', user);
-      return user.password === password ? user : false;
-    })
+    .then(user =>
+      // console.log('u', user);
+      Promise.resolve(user.password === password ? user : false)
+    )
     .catch((err) => {
       console.log('getUser - Err: ', err);
+      return Promise.reject(err);
     });
 }
 

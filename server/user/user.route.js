@@ -2,11 +2,10 @@ const express = require('express');
 const validate = require('express-validation');
 const paramValidation = require('../../config/param-validation');
 const userCtrl = require('./user.controller');
-const authenticate = require('../oauth/authenticate');
 
 const router = express.Router(); // eslint-disable-line new-cap
 
-router.all('*', authenticate());
+router.all('*', require('../middleware/authenticate'));
 router
   .route('/')
   /** GET /api/users - Get list of users */
