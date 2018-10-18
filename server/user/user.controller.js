@@ -6,10 +6,7 @@ function getUserByCredentials(username, password) {
       // console.log('u', user);
       Promise.resolve(user.password === password ? user : false)
     )
-    .catch((err) => {
-      console.log('getUser - Err: ', err);
-      return Promise.reject(err);
-    });
+    .catch(err => Promise.reject(err));
 }
 
 /**

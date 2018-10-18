@@ -6,6 +6,7 @@ const cameraCtrl = require('./camera.controller');
 const router = express.Router(); // eslint-disable-line new-cap
 
 router.all('*', require('../middleware/authenticate'));
+
 router
   .route('/')
   /** GET /api/cameras - Get list of cameras */

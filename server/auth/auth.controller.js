@@ -5,11 +5,11 @@ const config = require('../../config/config');
 
 async function login(req, res, next) {
   const postData = req.body;
-  var user = null;
+  let user = null;
   try {
     user = await userCtrl.getUserByCredentials(postData.username, postData.password);
   } catch (err) {
-    res.status(500).send(err);
+    res.status(404).send(err);
   }
   if (user) {
     const accessToken = jwt.sign(user, config.accessSecret, { expiresIn: config.tokenLife });
@@ -22,9 +22,10 @@ async function login(req, res, next) {
       new Date().getSeconds() + config.refreshTokenLife
     );
     const response = {
-      status: 'Logged in',
       accessToken,
-      refreshToken
+      refreshToken,
+      id: user._id,
+      username: user.username
     };
     const newAccessTokenModel = new authModel.AccessToken({
       access_token: accessToken,
@@ -49,7 +50,8 @@ async function login(req, res, next) {
 async function clearOldRefreshTokens(userId, res) {
   try {
     const allTokensList = await authModel.RefreshToken.list();
-    allTokensList.forEach(async refreshToken => {
+    allTokensList.forEach(async (refreshToken) => {
+      // eslint-disable-next-line no-new-wrappers
       if (new String(refreshToken.user._id).valueOf() === new String(userId).valueOf()) {
         await refreshToken.remove();
       }
@@ -61,7 +63,7 @@ async function clearOldRefreshTokens(userId, res) {
 
 async function token(req, res, next) {
   const postData = req.body;
-  var refreshTokenList = [];
+  let refreshTokenList = [];
   try {
     refreshTokenList = await authModel.RefreshToken.list();
   } catch (err) {
@@ -87,7 +89,6 @@ async function token(req, res, next) {
         new Date().getSeconds() + config.refreshTokenLife
       );
       const response = {
-        status: 'Token refresh',
         accessToken,
         refreshToken
       };

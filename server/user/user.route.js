@@ -6,6 +6,7 @@ const userCtrl = require('./user.controller');
 const router = express.Router(); // eslint-disable-line new-cap
 
 router.all('*', require('../middleware/authenticate'));
+
 router
   .route('/')
   /** GET /api/users - Get list of users */

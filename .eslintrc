@@ -14,34 +14,24 @@
         "named": "never"
       }
     ],
-    "no-use-before-define": [
-      2,
-      "nofunc"
-    ],
+    "no-use-before-define": [2, "nofunc"],
     // TODO: turn on later
-    "comma-dangle": [
-      0
-    ],
+    "comma-dangle": [0],
     "import/no-extraneous-dependencies": [
       "error",
       {
         "devDependencies": true
       }
     ],
-    "no-underscore-dangle": [
-      0
-    ]
+    "no-underscore-dangle": [0]
   },
   "env": {
     "node": true,
     "mocha": true
   },
   "parserOptions": {
-    "ecmaVersion": 6,
+    "ecmaVersion": 2017,
     "sourceType": "module"
   },
-  "extends": [
-    "eslint:recommended",
-    "airbnb-base"
-  ]
+  "extends": ["eslint:recommended", "airbnb-base"]
 }

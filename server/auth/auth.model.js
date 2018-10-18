@@ -1,5 +1,6 @@
-let mongoose = require('mongoose'),
-  Schema = mongoose.Schema;
+const mongoose = require('mongoose');
+
+const Schema = mongoose.Schema;
 
 const RefreshTokenSchema = new Schema({
   refresh_token: String,
@@ -11,18 +12,6 @@ const RefreshTokenSchema = new Schema({
  * Statics
  */
 RefreshTokenSchema.statics = {
-  /**
-   * List still valid refreshTokens
-   * @returns {Promise<RefresToken[]>}
-   */
-  listValidTokens() {
-    return this.find()
-      .populate('user')
-      .where('expires')
-      .gt(new Date())
-      .exec();
-  },
-
   /**
    * List refreshTokens
    * @returns {Promise<RefresToken[]>}
