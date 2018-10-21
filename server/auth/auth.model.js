@@ -1,4 +1,6 @@
 const mongoose = require('mongoose');
+const APIError = require('../helpers/APIError');
+const httpStatus = require('http-status');
 
 const Schema = mongoose.Schema;
 
@@ -44,9 +46,9 @@ AccessTokenSchema.statics = {
     return this.findOne({ access_token: accessToken })
       .populate('user')
       .exec()
-      .then((accessToken) => {
-        if (accessToken) {
-          return accessToken;
+      .then((accessTokenFromDb) => {
+        if (accessTokenFromDb) {
+          return accessTokenFromDb;
         }
         const err = new APIError('No such accessToken exists!', httpStatus.NOT_FOUND);
         return Promise.reject(err);

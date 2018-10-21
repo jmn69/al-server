@@ -15,7 +15,6 @@
       }
     ],
     "no-use-before-define": [2, "nofunc"],
-    // TODO: turn on later
     "comma-dangle": [0],
     "import/no-extraneous-dependencies": [
       "error",
@@ -27,11 +26,12 @@
   },
   "env": {
     "node": true,
-    "mocha": true
+    "jest/globals": true
   },
+  "plugins": ["import", "jest"],
   "parserOptions": {
     "ecmaVersion": 2017,
     "sourceType": "module"
   },
-  "extends": ["eslint:recommended", "airbnb-base"]
+  "extends": ["eslint:recommended", "airbnb-base", "plugin:jest/recommended"]
 }

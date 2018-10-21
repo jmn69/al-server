@@ -32,19 +32,22 @@ function get(req, res) {
 /**
  * Create new user
  * @property {string} req.body.username - The username of user.
- * @property {string} req.body.mobileNumber - The mobileNumber of user.
+ * @property {string} req.body.password - The password of user.
  * @returns {User}
  */
 function create(req, res, next) {
   const user = new User({
     username: req.body.username,
-    mobileNumber: req.body.mobileNumber
+    password: req.body.password
   });
 
   user
     .save()
     .then(savedUser => res.json(savedUser))
-    .catch(e => next(e));
+    .catch((e) => {
+      console.log(e);
+      next(e);
+    });
 }
 
 /**

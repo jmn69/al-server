@@ -9,7 +9,6 @@ module.exports = async (req, res, next) => {
   if (token) {
     try {
       const accessTokenInDb = await authModel.AccessToken.getByToken(token);
-      console.log('accessTokenInDb ' + accessTokenInDb);
       jwt.verify(
         token,
         config.accessSecret + accessTokenInDb.user.password + accessTokenInDb.user.lastLogOut,

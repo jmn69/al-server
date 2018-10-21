@@ -20,10 +20,9 @@ async function login(req, res, next) {
       expiresIn: config.refreshTokenLife
     });
 
+    const tokenLifeInHour = config.refreshTokenLife / 24 / 60 / 60;
     const refreshTokenExpires = new Date();
-    refreshTokenExpires.setDate(
-      refreshTokenExpires.getDate() + config.refreshTokenLife / 24 / 60 / 60
-    );
+    refreshTokenExpires.setDate(refreshTokenExpires.getDate() + tokenLifeInHour);
 
     const response = {
       accessToken,
@@ -82,10 +81,9 @@ async function token(req, res, next) {
         }
       );
 
+      const tokenLifeInHour = config.refreshTokenLife / 24 / 60 / 60;
       const refreshTokenExpires = new Date();
-      refreshTokenExpires.setDate(
-        refreshTokenExpires.getDate() + config.refreshTokenLife / 24 / 60 / 60
-      );
+      refreshTokenExpires.setDate(refreshTokenExpires.getDate() + tokenLifeInHour);
       const response = {
         accessToken,
         refreshToken
