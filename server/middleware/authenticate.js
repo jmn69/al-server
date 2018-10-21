@@ -21,7 +21,7 @@ module.exports = async (req, res, next) => {
         }
       );
     } catch (e) {
-      return res.status(500).send({
+      return res.status(401).send({
         error: true,
         message: e
       });

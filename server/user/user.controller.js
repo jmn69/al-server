@@ -44,10 +44,7 @@ function create(req, res, next) {
   user
     .save()
     .then(savedUser => res.json(savedUser))
-    .catch((e) => {
-      console.log(e);
-      next(e);
-    });
+    .catch(e => next(e));
 }
 
 /**

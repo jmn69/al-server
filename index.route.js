@@ -1,6 +1,5 @@
 const express = require('express');
 const userRoutes = require('./server/user/user.route');
-// const oauthRoutes = require('./server/oauth/oauth.route');
 const authRoutes = require('./server/auth/auth.route');
 const cameraRoutes = require('./server/camera/camera.route');
 

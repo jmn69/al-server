@@ -61,7 +61,7 @@ module.exports = {
       wsStreamUrl: Joi.string().required()
     },
     params: {
-      userId: Joi.string()
+      cameraId: Joi.string()
         .hex()
         .required()
     }
