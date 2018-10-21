@@ -11,6 +11,9 @@ pids
 # IDE
 .idea
 
+#vscode
+.vscode/*
+
 # OS generated files
 .DS_Store
 .DS_Store?

@@ -12,15 +12,19 @@ async function login(req, res, next) {
     res.status(404).send(err);
   }
   if (user) {
-    const accessToken = jwt.sign(user, config.accessSecret, { expiresIn: config.tokenLife });
+    const accessToken = jwt.sign(user, config.accessSecret + user.password + user.lastLogOut, {
+      expiresIn: config.tokenLife
+    });
     const accessTokenExpires = new Date().setSeconds(new Date().getSeconds() + config.tokenLife);
-    const refreshToken = jwt.sign(user, config.refreshSecret, {
+    const refreshToken = jwt.sign(user, config.refreshSecret + user.password + user.lastLogOut, {
       expiresIn: config.refreshTokenLife
     });
-    clearOldRefreshTokens(user._id, res);
-    const refreshTokenExpires = new Date().setSeconds(
-      new Date().getSeconds() + config.refreshTokenLife
+
+    const refreshTokenExpires = new Date();
+    refreshTokenExpires.setDate(
+      refreshTokenExpires.getDate() + config.refreshTokenLife / 24 / 60 / 60
     );
+
     const response = {
       accessToken,
       refreshToken,
@@ -43,21 +47,7 @@ async function login(req, res, next) {
 
     res.status(200).json(response);
   } else {
-    res.status(401).send('Unauthorized');
-  }
-}
-
-async function clearOldRefreshTokens(userId, res) {
-  try {
-    const allTokensList = await authModel.RefreshToken.list();
-    allTokensList.forEach(async (refreshToken) => {
-      // eslint-disable-next-line no-new-wrappers
-      if (new String(refreshToken.user._id).valueOf() === new String(userId).valueOf()) {
-        await refreshToken.remove();
-      }
-    });
-  } catch (err) {
-    res.status(500).send(err);
+    res.status(404).send('Resource not found');
   }
 }
 
@@ -76,17 +66,25 @@ async function token(req, res, next) {
 
   if (postData.refreshToken) {
     if (olRefreshToken && new Date().getTime() < new Date(olRefreshToken.expires).getTime()) {
-      const accessToken = jwt.sign(olRefreshToken.user, config.accessSecret, {
-        expiresIn: config.tokenLife
-      });
+      const accessToken = jwt.sign(
+        olRefreshToken.user,
+        config.accessSecret + olRefreshToken.user.password + olRefreshToken.user.lastLogOut,
+        {
+          expiresIn: config.tokenLife
+        }
+      );
       const accessTokenExpires = new Date().setSeconds(new Date().getSeconds() + config.tokenLife);
-      const refreshToken = jwt.sign(olRefreshToken.user, config.refreshSecret, {
-        expiresIn: config.refreshTokenLife
-      });
+      const refreshToken = jwt.sign(
+        olRefreshToken.user,
+        config.refreshSecret + olRefreshToken.user.password + olRefreshToken.user.lastLogOut,
+        {
+          expiresIn: config.refreshTokenLife
+        }
+      );
 
-      clearOldRefreshTokens(olRefreshToken.user._id, res);
-      const refreshTokenExpires = new Date().setSeconds(
-        new Date().getSeconds() + config.refreshTokenLife
+      const refreshTokenExpires = new Date();
+      refreshTokenExpires.setDate(
+        refreshTokenExpires.getDate() + config.refreshTokenLife / 24 / 60 / 60
       );
       const response = {
         accessToken,

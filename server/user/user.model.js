@@ -23,6 +23,11 @@ const UserSchema = new mongoose.Schema({
   createdAt: {
     type: Date,
     default: Date.now
+  },
+  lastLogOut: {
+    type: Date,
+    default: Date.now,
+    required: true
   }
 });
 
