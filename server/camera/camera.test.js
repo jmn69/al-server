@@ -19,6 +19,7 @@ describe('## User APIs', () => {
     privateIp: '192.168.1.3',
     pwd: 'admin',
     user: 'admin',
+    isOnline: true,
     wsStreamUrl: 'ws://localhost:9995'
   };
 
@@ -35,6 +36,7 @@ describe('## User APIs', () => {
           expect(res.body.privateIp).toEqual(camera.privateIp);
           expect(res.body.pwd).toEqual(camera.pwd);
           expect(res.body.user).toEqual(camera.user);
+          expect(res.body.isOnline).toEqual(camera.isOnline);
           expect(res.body.wsStreamUrl).toEqual(camera.wsStreamUrl);
           camera = res.body;
           done();
@@ -55,6 +57,7 @@ describe('## User APIs', () => {
           expect(res.body.privateIp).toEqual(camera.privateIp);
           expect(res.body.pwd).toEqual(camera.pwd);
           expect(res.body.user).toEqual(camera.user);
+          expect(res.body.isOnline).toEqual(camera.isOnline);
           expect(res.body.wsStreamUrl).toEqual(camera.wsStreamUrl);
           done();
         })
@@ -87,6 +90,7 @@ describe('## User APIs', () => {
           expect(res.body.privateIp).toEqual(camera.privateIp);
           expect(res.body.pwd).toEqual(camera.pwd);
           expect(res.body.user).toEqual(camera.user);
+          expect(res.body.isOnline).toEqual(camera.isOnline);
           expect(res.body.wsStreamUrl).toEqual(camera.wsStreamUrl);
           done();
         })
