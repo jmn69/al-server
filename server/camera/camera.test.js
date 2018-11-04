@@ -15,7 +15,8 @@ describe('## User APIs', () => {
   let camera = {
     name: 'Garage',
     type: 1,
-    domain: '10.4.34.6',
+    publicDomain: '10.4.34.6',
+    privateIp: '192.168.1.3',
     pwd: 'admin',
     user: 'admin',
     wsStreamUrl: 'ws://localhost:9995'
@@ -30,7 +31,8 @@ describe('## User APIs', () => {
         .then((res) => {
           expect(res.body.name).toEqual(camera.name);
           expect(res.body.type).toEqual(camera.type);
-          expect(res.body.domain).toEqual(camera.domain);
+          expect(res.body.publicDomain).toEqual(camera.publicDomain);
+          expect(res.body.privateIp).toEqual(camera.privateIp);
           expect(res.body.pwd).toEqual(camera.pwd);
           expect(res.body.user).toEqual(camera.user);
           expect(res.body.wsStreamUrl).toEqual(camera.wsStreamUrl);
@@ -49,7 +51,8 @@ describe('## User APIs', () => {
         .then((res) => {
           expect(res.body.name).toEqual(camera.name);
           expect(res.body.type).toEqual(camera.type);
-          expect(res.body.domain).toEqual(camera.domain);
+          expect(res.body.publicDomain).toEqual(camera.publicDomain);
+          expect(res.body.privateIp).toEqual(camera.privateIp);
           expect(res.body.pwd).toEqual(camera.pwd);
           expect(res.body.user).toEqual(camera.user);
           expect(res.body.wsStreamUrl).toEqual(camera.wsStreamUrl);
@@ -80,7 +83,8 @@ describe('## User APIs', () => {
         .then((res) => {
           expect(res.body.name).toEqual('Salon');
           expect(res.body.type).toEqual(camera.type);
-          expect(res.body.domain).toEqual(camera.domain);
+          expect(res.body.publicDomain).toEqual(camera.publicDomain);
+          expect(res.body.privateIp).toEqual(camera.privateIp);
           expect(res.body.pwd).toEqual(camera.pwd);
           expect(res.body.user).toEqual(camera.user);
           expect(res.body.wsStreamUrl).toEqual(camera.wsStreamUrl);

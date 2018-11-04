@@ -15,9 +15,13 @@ const CameraSchema = new mongoose.Schema({
     type: Number,
     required: true
   },
-  domain: {
+  publicDomain: {
     type: String,
     required: true
+  },
+  privateIp: {
+    type: String,
+    required: false
   },
   pwd: {
     type: String,
@@ -29,6 +33,14 @@ const CameraSchema = new mongoose.Schema({
   },
   wsStreamUrl: {
     type: String,
+    required: true
+  },
+  ioAlarm: {
+    type: Number,
+    required: false
+  },
+  isOnline: {
+    type: Boolean,
     required: true
   },
   createdAt: {

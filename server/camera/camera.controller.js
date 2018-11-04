@@ -24,7 +24,8 @@ function get(req, res) {
  * Create new camera
  * @property {string} req.body.name - The name of the camera.
  * @property {number} req.body.type - The type of camera.
- * @property {string} req.body.domain - The domain/ip of camera.
+ * @property {string} req.body.publicDomain - The public domain/ip of camera.
+ * @property {string} req.body.privateIp - The private ip of camera. For lan access
  * @property {string} req.body.pwd - The password of camera.
  * @property {string} req.body.user - The username of camera.
  * @property {string} req.body.wsStreamUrl - The webservice url of the camera stream mjpeg format.
@@ -34,9 +35,12 @@ function create(req, res, next) {
   const camera = new Camera({
     name: req.body.name,
     type: req.body.type,
-    domain: req.body.domain,
+    publicDomain: req.body.publicDomain,
+    privateIp: req.body.privateIp,
     pwd: req.body.pwd,
     user: req.body.user,
+    ioAlarm: req.body.ioAlarm,
+    isOnline: req.body.isOnline,
     wsStreamUrl: req.body.wsStreamUrl
   });
 
@@ -50,9 +54,12 @@ function create(req, res, next) {
  * Update existing camera
  * @property {string} req.body.name - The name of the camera.
  * @property {number} req.body.type - The type of camera.
- * @property {string} req.body.domain - The domain/ip of camera.
+ * @property {string} req.body.publicDomain - The public domain/ip of camera.
+ * @property {string} req.body.privateIp - The private ip of camera
  * @property {string} req.body.pwd - The password of camera.
  * @property {string} req.body.user - The username of camera.
+ * @property {number} req.body.ioAlarm - The alarm state camera.
+ * @property {boolean} req.body.isOnline - The camera status.
  * @property {string} req.body.wsStreamUrl - The webservice url of the camera stream.
  * @returns {Camera}
  */
@@ -60,9 +67,12 @@ function update(req, res, next) {
   const camera = req.camera;
   camera.name = req.body.name;
   camera.type = req.body.type;
-  camera.domain = req.body.domain;
+  camera.publicDomain = req.body.publicDomain;
+  camera.privateIp = req.body.privateIp;
   camera.pwd = req.body.pwd;
   camera.user = req.body.user;
+  camera.ioAlarm = req.body.ioAlarm;
+  camera.isOnline = req.body.isOnline;
   camera.wsStreamUrl = req.body.wsStreamUrl;
 
   camera

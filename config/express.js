@@ -13,7 +13,6 @@ const winstonInstance = require('./winston');
 const routes = require('../index.route');
 const config = require('./config');
 const APIError = require('../server/helpers/APIError');
-// TODO: replace by locale from api call
 
 const app = express();
 

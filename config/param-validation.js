@@ -43,9 +43,12 @@ module.exports = {
     body: {
       name: Joi.string().required(),
       type: Joi.number().required(),
-      domain: Joi.string().required(),
+      publicDomain: Joi.string().required(),
+      privateIp: Joi.string(),
       pwd: Joi.string().required(),
       user: Joi.string().required(),
+      ioAlarm: Joi.number(),
+      isOnline: Joi.boolean().required(),
       wsStreamUrl: Joi.string().required()
     }
   },
@@ -55,9 +58,11 @@ module.exports = {
     body: {
       name: Joi.string().required(),
       type: Joi.number().required(),
-      domain: Joi.string().required(),
+      publicDomain: Joi.string().required(),
+      privateIp: Joi.string(),
       pwd: Joi.string().required(),
-      user: Joi.string().required(),
+      ioAlarm: Joi.string(),
+      isOnline: Joi.boolean().required(),
       wsStreamUrl: Joi.string().required()
     },
     params: {
