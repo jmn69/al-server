@@ -48,8 +48,8 @@ module.exports = {
       pwd: Joi.string().required(),
       user: Joi.string().required(),
       ioAlarm: Joi.number(),
-      isOnline: Joi.boolean().required(),
-      wsStreamUrl: Joi.string().required()
+      isOnline: Joi.boolean(),
+      wsStreamUrl: Joi.string()
     }
   },
 
@@ -61,9 +61,10 @@ module.exports = {
       publicDomain: Joi.string().required(),
       privateIp: Joi.string(),
       pwd: Joi.string().required(),
+      user: Joi.string().required(),
       ioAlarm: Joi.string(),
-      isOnline: Joi.boolean().required(),
-      wsStreamUrl: Joi.string().required()
+      isOnline: Joi.boolean(),
+      wsStreamUrl: Joi.string()
     },
     params: {
       cameraId: Joi.string()

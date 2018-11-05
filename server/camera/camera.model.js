@@ -6,48 +6,47 @@ const APIError = require('../helpers/APIError');
 /**
  * Camera Schema
  */
-const CameraSchema = new mongoose.Schema({
-  name: {
-    type: String,
-    required: true
+const CameraSchema = new mongoose.Schema(
+  {
+    name: {
+      type: String,
+      required: true
+    },
+    type: {
+      type: Number,
+      required: true
+    },
+    publicDomain: {
+      type: String,
+      required: true
+    },
+    privateIp: {
+      type: String,
+      required: false
+    },
+    pwd: {
+      type: String,
+      required: true
+    },
+    user: {
+      type: String,
+      required: true
+    },
+    wsStreamUrl: {
+      type: String,
+      required: false
+    },
+    ioAlarm: {
+      type: Number,
+      required: false
+    },
+    isOnline: {
+      type: Boolean,
+      required: false
+    }
   },
-  type: {
-    type: Number,
-    required: true
-  },
-  publicDomain: {
-    type: String,
-    required: true
-  },
-  privateIp: {
-    type: String,
-    required: false
-  },
-  pwd: {
-    type: String,
-    required: true
-  },
-  user: {
-    type: String,
-    required: true
-  },
-  wsStreamUrl: {
-    type: String,
-    required: true
-  },
-  ioAlarm: {
-    type: Number,
-    required: false
-  },
-  isOnline: {
-    type: Boolean,
-    required: true
-  },
-  createdAt: {
-    type: Date,
-    default: Date.now
-  }
-});
+  { timestamps: true }
+);
 
 /**
  * Add your

@@ -64,7 +64,7 @@ function create(req, res, next) {
  * @returns {Camera}
  */
 function update(req, res, next) {
-  const camera = req.camera;
+  const camera = {};
   camera.name = req.body.name;
   camera.type = req.body.type;
   camera.publicDomain = req.body.publicDomain;
@@ -75,10 +75,16 @@ function update(req, res, next) {
   camera.isOnline = req.body.isOnline;
   camera.wsStreamUrl = req.body.wsStreamUrl;
 
-  camera
-    .save()
-    .then(savedCamera => res.json(savedCamera))
-    .catch(e => next(e));
+  // camera
+  //   .save()
+  //   .then(savedCamera => res.json(savedCamera))
+  //   .catch(e => next(e));
+  Camera.update({ _id: req.camera.id }, { $set: camera }, (error, savedCamera) => {
+    if (error) {
+      next(error);
+    }
+    res.json({ success: true });
+  });
 }
 
 /**
