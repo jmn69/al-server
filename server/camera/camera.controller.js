@@ -91,38 +91,8 @@ function update(req, res, next) {
   });
 }
 
-/**
- * Toggle camera state if possible
- * @returns {boolean}
- */
-toggleDetection = async (req, res, next) => {
-  const newDetectionState = req.camera.ioAlarm === 0 ? 1 : 0;
-  let succeed = true;
-  try {
-    switch (req.camera.type) {
-      case 1:
-        await toggleDetectionFoscam(req.camera, newDetectionState);
-        break;
-    }
-  } catch (e) {
-    succeed = false;
-  }
-  if (succeed) {
-    Camera.update(
-      { _id: req.camera.id },
-      { ioAlarm: Number(newDetectionState), isOnline: true },
-      (error) => {
-        if (error) {
-          next(error);
-        }
-        res.json({ success: true });
-      }
-    );
-  }
-};
-
 // TODO: Do something better with every type of camera
-toggleDetectionFoscam = async (camera, newDetectionState) => {
+const toggleDetectionFoscam = async (camera, newDetectionState) => {
   try {
     const response = await axios.get(
       `https://${camera.publicDomain}/cgi-bin/CGIProxy.fcgi?cmd=setMotionDetectConfig&
@@ -146,6 +116,38 @@ toggleDetectionFoscam = async (camera, newDetectionState) => {
     }
   } catch (e) {
     return Promise.reject(e);
+  }
+  return Promise.reject();
+};
+
+/**
+ * Toggle camera state if possible
+ * @returns {boolean}
+ */
+const toggleDetection = async (req, res, next) => {
+  const newDetectionState = req.camera.ioAlarm === 0 ? 1 : 0;
+  let succeed = true;
+  try {
+    switch (req.camera.type) {
+      case 1:
+        await toggleDetectionFoscam(req.camera, newDetectionState);
+        break;
+      default:
+    }
+  } catch (e) {
+    succeed = false;
+  }
+  if (succeed) {
+    Camera.update(
+      { _id: req.camera.id },
+      { ioAlarm: Number(newDetectionState), isOnline: true },
+      (error) => {
+        if (error) {
+          next(error);
+        }
+        res.json({ success: true });
+      }
+    );
   }
 };
 
