@@ -26,6 +26,11 @@ router
   /** DELETE /api/cameras/:cameraId - Delete camera */
   .delete(cameraCtrl.remove);
 
+router
+  .route('/:cameraId/toggle-detection')
+  /** GET /api/cameras/:cameraId/toggle-detection - Toggle camera detection state */
+  .get(cameraCtrl.toggleDetection);
+
 /** Load camera when API with cameraId route parameter is hit */
 router.param('cameraId', cameraCtrl.load);
 

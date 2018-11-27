@@ -84,14 +84,7 @@ describe('## User APIs', () => {
         .send(camera)
         .expect(httpStatus.OK)
         .then((res) => {
-          expect(res.body.name).toEqual('Salon');
-          expect(res.body.type).toEqual(camera.type);
-          expect(res.body.publicDomain).toEqual(camera.publicDomain);
-          expect(res.body.privateIp).toEqual(camera.privateIp);
-          expect(res.body.pwd).toEqual(camera.pwd);
-          expect(res.body.user).toEqual(camera.user);
-          expect(res.body.isOnline).toEqual(camera.isOnline);
-          expect(res.body.wsStreamUrl).toEqual(camera.wsStreamUrl);
+          expect(res.body.success).toEqual(true);
           done();
         })
         .catch(done);
@@ -129,7 +122,7 @@ describe('## User APIs', () => {
         .delete(`/api/cameras/${camera._id}`)
         .expect(httpStatus.OK)
         .then((res) => {
-          expect(res.body.name).toEqual('Salon');
+          expect(res.body.name).toEqual('Garage');
           done();
         })
         .catch(done);

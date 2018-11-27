@@ -1,4 +1,12 @@
 const Camera = require('./camera.model');
+const axios = require('axios');
+const parseString = require('xml2js').parseString;
+const rootCas = require('ssl-root-cas').create();
+require('https').globalAgent.options.ca = rootCas;
+
+const https = require('https');
+
+const agent = new https.Agent({ rejectUnauthorized: false, timeout: 5000 });
 
 /**
  * Load camera and append to req.
@@ -75,17 +83,71 @@ function update(req, res, next) {
   camera.isOnline = req.body.isOnline;
   camera.wsStreamUrl = req.body.wsStreamUrl;
 
-  // camera
-  //   .save()
-  //   .then(savedCamera => res.json(savedCamera))
-  //   .catch(e => next(e));
-  Camera.update({ _id: req.camera.id }, { $set: camera }, (error, savedCamera) => {
+  Camera.update({ _id: req.camera.id }, { $set: camera }, (error) => {
     if (error) {
       next(error);
     }
     res.json({ success: true });
   });
 }
+
+/**
+ * Toggle camera state if possible
+ * @returns {boolean}
+ */
+toggleDetection = async (req, res, next) => {
+  const newDetectionState = req.camera.ioAlarm === 0 ? 1 : 0;
+  let succeed = true;
+  try {
+    switch (req.camera.type) {
+      case 1:
+        await toggleDetectionFoscam(req.camera, newDetectionState);
+        break;
+    }
+  } catch (e) {
+    succeed = false;
+  }
+  if (succeed) {
+    Camera.update(
+      { _id: req.camera.id },
+      { ioAlarm: Number(newDetectionState), isOnline: true },
+      (error) => {
+        if (error) {
+          next(error);
+        }
+        res.json({ success: true });
+      }
+    );
+  }
+};
+
+// TODO: Do something better with every type of camera
+toggleDetectionFoscam = async (camera, newDetectionState) => {
+  try {
+    const response = await axios.get(
+      `https://${camera.publicDomain}/cgi-bin/CGIProxy.fcgi?cmd=setMotionDetectConfig&
+      isEnable=${newDetectionState}&linkage=142&snapInterval=2&sensitivity=1&triggerInterval=5&
+      isMovAlarmEnable=1&isPirAlarmEnable=1&schedule0=281474976710655&schedule1=281474976710655&
+      schedule2=281474976710655&schedule3=281474976710655&schedule4=281474976710655&
+      schedule5=281474976710655&schedule6=281474976710655&area0=1023&area1=1023&area2=1023&
+      area3=1023&area4=1023&area5=1023&area6=1023&area7=1023&area7=1023&area8=1023&area9=1023&
+      usr=${camera.user}&pwd=${camera.pwd}`,
+      {
+        httpsAgent: agent
+      }
+    );
+    if (response && response.status === 200 && response.data) {
+      parseString(response.data, { explicitArray: false }, (err, result) => {
+        if (result && result.CGI_Result && Number(result.CGI_Result.result) === 0) {
+          return Promise.resolve();
+        }
+        return Promise.reject();
+      });
+    }
+  } catch (e) {
+    return Promise.reject(e);
+  }
+};
 
 /**
  * Get camera list.
@@ -112,4 +174,4 @@ function remove(req, res, next) {
     .catch(e => next(e));
 }
 
-module.exports = { load, get, create, update, list, remove };
+module.exports = { load, get, create, update, list, remove, toggleDetection };
