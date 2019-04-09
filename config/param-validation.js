@@ -71,5 +71,12 @@ module.exports = {
         .hex()
         .required()
     }
+  },
+
+  // POST /api/security
+  setSecurityMod: {
+    body: {
+      lock: Joi.boolean().required()
+    }
   }
 };

@@ -1,4 +1,5 @@
 const Camera = require('./camera.model');
+const Enums = require('./camera.enums');
 const axios = require('axios');
 const parseString = require('xml2js').parseString;
 const rootCas = require('ssl-root-cas').create();
@@ -79,7 +80,7 @@ function update(req, res, next) {
   camera.privateIp = req.body.privateIp;
   camera.pwd = req.body.pwd;
   camera.user = req.body.user;
-  camera.ioAlarm = req.body.ioAlarm;
+  camera.ioAlarm = req.body.ioAlarm ? req.body.ioAlarm : null;
   camera.isOnline = req.body.isOnline;
   camera.wsStreamUrl = req.body.wsStreamUrl;
 
@@ -92,7 +93,7 @@ function update(req, res, next) {
 }
 
 // TODO: Do something better with every type of camera
-const toggleDetectionFoscam = async (camera, newDetectionState) => {
+const setDetectionFoscam = async (camera, newDetectionState) => {
   try {
     const response = await axios.get(
       `https://${camera.publicDomain}/cgi-bin/CGIProxy.fcgi?cmd=setMotionDetectConfig&
@@ -113,6 +114,8 @@ const toggleDetectionFoscam = async (camera, newDetectionState) => {
         }
         return Promise.reject();
       });
+    } else {
+      return Promise.reject();
     }
   } catch (e) {
     return Promise.reject(e);
@@ -120,23 +123,30 @@ const toggleDetectionFoscam = async (camera, newDetectionState) => {
   return Promise.reject();
 };
 
+const setDetectionByCamera = async (camera, newDetectionState) => {
+  try {
+    switch (camera.type) {
+      case 1:
+        await setDetectionFoscam(camera, newDetectionState);
+        return Promise.resolve();
+      default:
+        return Promise.reject();
+    }
+  } catch (e) {
+    return Promise.reject(e);
+  }
+};
+
 /**
  * Toggle camera state if possible
  * @returns {boolean}
  */
-const toggleDetection = async (req, res, next) => {
-  const newDetectionState = req.camera.ioAlarm === 0 ? 1 : 0;
-  let succeed = true;
-  try {
-    switch (req.camera.type) {
-      case 1:
-        await toggleDetectionFoscam(req.camera, newDetectionState);
-        break;
-      default:
-    }
-  } catch (e) {
-    succeed = false;
-  }
+const toggleDetection = (req, res, next) => {
+  const newDetectionState =
+    req.camera.ioAlarm === Enums.DetectionStateEnum.Disabled
+      ? Enums.DetectionStateEnum.Enabled
+      : Enums.DetectionStateEnum.Disabled;
+  const succeed = setDetectionByCamera(req.camera, newDetectionState);
   if (succeed) {
     Camera.update(
       { _id: req.camera.id },
@@ -176,4 +186,4 @@ function remove(req, res, next) {
     .catch(e => next(e));
 }
 
-module.exports = { load, get, create, update, list, remove, toggleDetection };
+module.exports = { load, get, create, update, list, remove, toggleDetection, setDetectionByCamera };

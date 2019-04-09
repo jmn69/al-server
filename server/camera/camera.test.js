@@ -11,7 +11,7 @@ afterAll((done) => {
   done();
 });
 
-describe('## User APIs', () => {
+describe('## Camera APIs', () => {
   let camera = {
     name: 'Garage',
     type: 1,
@@ -78,7 +78,7 @@ describe('## User APIs', () => {
 
   describe('# PUT /api/cameras/:cameraId', () => {
     it('should update camera details', (done) => {
-      camera.name = 'Salon';
+      camera.name = 'Garage';
       request(app)
         .put(`/api/cameras/${camera._id}`)
         .send(camera)
