@@ -11,60 +11,72 @@
     "yarn": ">=1.5.1"
   },
   "scripts": {
-    "start": "node index.js",
+    "start": "cross-env NODE_ENV=development nodemon --exec babel-node src/index.js",
     "start:debug": "cross-env DEBUG=al-server:* yarn start",
-    "lint": "esw *.js server config --color",
-    "lint:watch": "yarn lint -- --watch",
-    "precommit": "yarn lint && yarn test",
-    "test": "cross-env NODE_ENV=test jest server",
-    "coverage": "cross-env NODE_ENV=test jest --collectCoverageFrom=server/**.js --coverage"
+    "compile": "babel ./src --out-dir .compiled --source-maps --watch",
+    "lint": "eslint --fix src --color",
+    "format": "prettier --single-quote --trailing-comma es5 --write '{src}/**/*.js' && npm run lint",
+    "precommit": "lint-staged && yarn test",
+    "test": "cross-env NODE_ENV=test jest src/server",
+    "coverage": "cross-env NODE_ENV=test jest --collectCoverageFrom=src/server/**.js --coverage"
   },
   "dependencies": {
-    "axios": "^0.18.0",
+    "axios": "^0.19.0",
     "bluebird": "3.5.1",
     "body-parser": "1.18.2",
     "compression": "1.7.2",
     "cookie-parser": "1.4.3",
     "cors": "2.8.4",
     "debug": "^2.4.5",
-    "dotenv": "^4.0.0",
-    "eslint-plugin-import": "^2.14.0",
-    "eslint-plugin-jest": "21.25.1",
+    "dotenv": "^6.2.0",
     "express": "4.16.3",
     "express-jwt": "5.3.1",
     "express-validation": "1.0.2",
     "express-winston": "2.5.0",
     "helmet": "3.12.0",
     "http-status": "1.0.1",
-    "jest": "23.6.0",
     "joi": "^14.0.4",
     "jsonwebtoken": "7.1.9",
     "lodash": "false4.17.11",
     "method-override": "^2.3.10",
-    "mongoose": "4.7.4",
+    "mongoose": "5.4.19",
     "morgan": "1.9.0",
     "oauth2-server": "^3.0.0-b2",
     "ssl-root-cas": "^1.2.5",
-    "winston": "2.4.1",
+    "winston": "3.2.1",
     "xml2js": "^0.4.19"
   },
   "devDependencies": {
-    "commitizen": "^2.9.6",
+    "@babel/core": "^7.4.5",
+    "@babel/cli": "^7.2.3",
+    "@babel/node": "^7.2.2",
+    "@babel/polyfill": "^7.4.0",
+    "@babel/preset-env": "^7.4.1",
+    "babel-eslint": "^10.0.1",
     "coveralls": "^3.0.0",
     "cross-env": "5.1.4",
-    "cz-conventional-changelog": "1.2.0",
-    "eslint": "3.16.1",
-    "eslint-config-airbnb-base": "7.1.0",
-    "eslint-plugin-react": "^7.11.1",
-    "eslint-watch": "2.1.14",
+    "eslint": "^5.16.0",
+    "eslint-config-airbnb-base": "^13.1.0",
+    "eslint-config-prettier": "^4.1.0",
+    "eslint-plugin-import": "^2.16.0",
+    "eslint-plugin-jest": "^22.6.4",
     "husky": "0.14.3",
+    "jest": "^24.8.0",
+    "lint-staged": "^8.2.0",
+    "nodemon": "^1.18.10",
+    "prettier": "^1.4.4",
+    "rimraf": "^2.6.1",
     "supertest": "3.0.0",
     "supertest-as-promised": "4.0.2",
     "validate-commit-msg": "^2.14.0"
   },
-  "config": {
-    "commitizen": {
-      "path": "./node_modules/cz-conventional-changelog"
+  "lint-staged": {
+    "linters": {
+      "*.js": [
+        "prettier --single-quote --trailing-comma es5 --write",
+        "eslint --fix",
+        "git add"
+      ]
     }
   }
 }

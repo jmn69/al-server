@@ -1,8 +1,6 @@
 # Use latest node version 8.x
 FROM node:8.10.0
 
-MAINTAINER Kunal Kapadia <kunalkapadia12@gmail.com>
-
 # create app directory in container
 RUN mkdir -p /app
 
