@@ -47,6 +47,8 @@ export const setSecurityMod = (req, res, next) => {
           return { id: camera.id, succeed: true };
         }
  catch (e) {
+          // console.log(`camera: ${camera}`);
+          console.log(e);
           return { id: camera.id, succeed: false };
         }
       });

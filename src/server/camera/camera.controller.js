@@ -127,15 +127,15 @@ export const setDetectionFoscam = async (camera, newDetectionState) => {
  catch (e) {
     return Promise.reject(e);
   }
-  return Promise.reject();
 };
 
 export const setDetectionByCamera = async (camera, newDetectionState) => {
   try {
     switch (camera.type) {
-      case 1:
+      case 1: {
         await setDetectionFoscam(camera, newDetectionState);
         return Promise.resolve();
+      }
       default:
         return Promise.reject();
     }
