@@ -106,7 +106,7 @@ export const setDetectionFoscam = async (camera, newDetectionState) => {
   try {
     const response = await axios.get(
       `https://${camera.publicDomain}:${camera.httpsPort}/cgi-bin/CGIProxy.fcgi?cmd=setMotionDetectConfig&
-      isEnable=${newDetectionState}&linkage=142&snapInterval=2&sensitivity=1&triggerInterval=5&
+      isEnable=${newDetectionState}&linkage=0&snapInterval=2&sensitivity=1&triggerInterval=5&
       isMovAlarmEnable=1&isPirAlarmEnable=1&schedule0=281474976710655&schedule1=281474976710655&
       schedule2=281474976710655&schedule3=281474976710655&schedule4=281474976710655&
       schedule5=281474976710655&schedule6=281474976710655&area0=1023&area1=1023&area2=1023&
@@ -114,6 +114,7 @@ export const setDetectionFoscam = async (camera, newDetectionState) => {
       usr=${camera.user}&pwd=${camera.pwd}`,
       {
         httpsAgent: agent,
+        timeout: 5000,
       }
     );
     if (response && response.status === 200 && response.data) {

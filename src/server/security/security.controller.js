@@ -38,18 +38,37 @@ export const setSecurityMod = (req, res, next) => {
     if (cameras) {
       camerasStatusResultP = cameras.map(async camera => {
         try {
-          await setDetectionByCamera(
-            camera,
-            req.body.lock
-              ? DetectionStateEnum.Enabled
-              : DetectionStateEnum.Disabled
+          const newDetectionState = req.body.lock
+            ? DetectionStateEnum.Enabled
+            : DetectionStateEnum.Disabled;
+          await setDetectionByCamera(camera, newDetectionState);
+          Camera.update(
+            { _id: camera.id },
+            { ioAlarm: Number(newDetectionState), isOnline: true },
+            error => {
+              if (error) {
+                next(error);
+              }
+            }
           );
-          return { id: camera.id, succeed: true };
+          return { id: camera.id, name: camera.name, succeed: true };
         }
  catch (e) {
-          // console.log(`camera: ${camera}`);
-          console.log(e);
-          return { id: camera.id, succeed: false };
+          Camera.update(
+            { _id: camera.id },
+            { ioAlarm: null, isOnline: false },
+            error => {
+              if (error) {
+                next(error);
+              }
+            }
+          );
+          return {
+            id: camera.id,
+            name: camera.name,
+            succeed: false,
+            error: e.message,
+          };
         }
       });
       camerasStatusResult = await Promise.all(camerasStatusResultP);
