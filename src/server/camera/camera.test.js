@@ -18,6 +18,8 @@ describe('## Camera APIs', () => {
     type: 1,
     publicDomain: '10.4.34.6',
     privateIp: '192.168.1.3',
+    httpsPort: '443',
+    rtspPort: '4666',
     pwd: 'admin',
     user: 'admin',
     isOnline: true,
@@ -34,6 +36,8 @@ describe('## Camera APIs', () => {
           expect(res.body.name).toEqual(camera.name);
           expect(res.body.type).toEqual(camera.type);
           expect(res.body.publicDomain).toEqual(camera.publicDomain);
+          expect(res.body.rtspPort).toEqual(camera.rtspPort);
+          expect(res.body.httpsPort).toEqual(camera.httpsPort);
           expect(res.body.privateIp).toEqual(camera.privateIp);
           expect(res.body.pwd).toEqual(camera.pwd);
           expect(res.body.user).toEqual(camera.user);
@@ -55,6 +59,8 @@ describe('## Camera APIs', () => {
           expect(res.body.name).toEqual(camera.name);
           expect(res.body.type).toEqual(camera.type);
           expect(res.body.publicDomain).toEqual(camera.publicDomain);
+          expect(res.body.rtspPort).toEqual(camera.rtspPort);
+          expect(res.body.httpsPort).toEqual(camera.httpsPort);
           expect(res.body.privateIp).toEqual(camera.privateIp);
           expect(res.body.pwd).toEqual(camera.pwd);
           expect(res.body.user).toEqual(camera.user);

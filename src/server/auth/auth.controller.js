@@ -14,7 +14,7 @@ export const login = async (req, res, next) => {
   }
   if (user) {
     const accessToken = jwt.sign(
-      user,
+      user.toJSON(),
       config.accessSecret + user.password + user.lastLogOut,
       {
         expiresIn: config.tokenLife,
@@ -24,7 +24,7 @@ export const login = async (req, res, next) => {
       new Date().getSeconds() + config.tokenLife
     );
     const refreshToken = jwt.sign(
-      user,
+      user.toJSON(),
       config.refreshSecret + user.password + user.lastLogOut,
       {
         expiresIn: config.refreshTokenLife,
@@ -84,7 +84,7 @@ export const token = async (req, res, next) => {
       new Date().getTime() < new Date(olRefreshToken.expires).getTime()
     ) {
       const accessToken = jwt.sign(
-        olRefreshToken.user,
+        olRefreshToken.user.toJSON(),
         config.accessSecret +
           olRefreshToken.user.password +
           olRefreshToken.user.lastLogOut,
@@ -96,7 +96,7 @@ export const token = async (req, res, next) => {
         new Date().getSeconds() + config.tokenLife
       );
       const refreshToken = jwt.sign(
-        olRefreshToken.user,
+        olRefreshToken.user.toJSON(),
         config.refreshSecret +
           olRefreshToken.user.password +
           olRefreshToken.user.lastLogOut,

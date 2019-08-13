@@ -24,6 +24,14 @@ const CameraSchema = new Mongoose.Schema(
       type: String,
       required: false,
     },
+    httpsPort: {
+      type: String,
+      required: true,
+    },
+    rtspPort: {
+      type: String,
+      required: true,
+    },
     pwd: {
       type: String,
       required: true,

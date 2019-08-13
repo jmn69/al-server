@@ -35,6 +35,8 @@ export const get = (req, res) => {
  * @property {string} req.body.name - The name of the camera.
  * @property {number} req.body.type - The type of camera.
  * @property {string} req.body.publicDomain - The public domain/ip of camera.
+ * @property {string} req.body.httpsPort - The https port of camera
+ * @property {string} req.body.rtspPort - The rtsp port of camera
  * @property {string} req.body.privateIp - The private ip of camera. For lan access
  * @property {string} req.body.pwd - The password of camera.
  * @property {string} req.body.user - The username of camera.
@@ -46,6 +48,8 @@ export const create = (req, res, next) => {
     name: req.body.name,
     type: req.body.type,
     publicDomain: req.body.publicDomain,
+    httpsPort: req.body.httpsPort,
+    rtspPort: req.body.rtspPort,
     privateIp: req.body.privateIp,
     pwd: req.body.pwd,
     user: req.body.user,
@@ -65,6 +69,8 @@ export const create = (req, res, next) => {
  * @property {string} req.body.name - The name of the camera.
  * @property {number} req.body.type - The type of camera.
  * @property {string} req.body.publicDomain - The public domain/ip of camera.
+ * @property {string} req.body.httpsPort - The https port of camera
+ * @property {string} req.body.rtspPort - The rtsp port of camera
  * @property {string} req.body.privateIp - The private ip of camera
  * @property {string} req.body.pwd - The password of camera.
  * @property {string} req.body.user - The username of camera.
@@ -78,6 +84,8 @@ export const update = (req, res, next) => {
   camera.name = req.body.name;
   camera.type = req.body.type;
   camera.publicDomain = req.body.publicDomain;
+  camera.httpsPort = req.body.httpsPort;
+  camera.rtspPort = req.body.rtspPort;
   camera.privateIp = req.body.privateIp;
   camera.pwd = req.body.pwd;
   camera.user = req.body.user;
@@ -97,7 +105,7 @@ export const update = (req, res, next) => {
 export const setDetectionFoscam = async (camera, newDetectionState) => {
   try {
     const response = await axios.get(
-      `https://${camera.publicDomain}/cgi-bin/CGIProxy.fcgi?cmd=setMotionDetectConfig&
+      `https://${camera.publicDomain}:${camera.httpsPort}/cgi-bin/CGIProxy.fcgi?cmd=setMotionDetectConfig&
       isEnable=${newDetectionState}&linkage=142&snapInterval=2&sensitivity=1&triggerInterval=5&
       isMovAlarmEnable=1&isPirAlarmEnable=1&schedule0=281474976710655&schedule1=281474976710655&
       schedule2=281474976710655&schedule3=281474976710655&schedule4=281474976710655&
