@@ -1,10 +1,10 @@
 import express from 'express';
-import { list, getS3Image, load } from './alert.controller';
+import { list, getS3Image, getS3Video, load } from './alert.controller';
 import authenticate from '../middleware/authenticate';
 
 const router = express.Router(); // eslint-disable-line new-cap
 
-router.all(/^\/(?!image).*/, authenticate);
+router.all(/^\/(?!s3).*/, authenticate);
 
 router
   .route('/')
@@ -12,9 +12,14 @@ router
   .get(list);
 
 router
-  .route('/image/:alertId')
-  /** GET /api/alert/image/:alertId - Get s3 image resource */
+  .route('/s3/image/:alertId')
+  /** GET /api/alert/s3/image/:alertId - Get s3 image resource */
   .get(getS3Image);
+
+router
+  .route('/s3/video/:alertId')
+  /** GET /api/alert/s3/video/:alertId - Get s3 video resource */
+  .get(getS3Video);
 
 /** Load alert when API with alertId route parameter is hit */
 router.param('alertId', load);

@@ -62,3 +62,24 @@ export const getS3Image = (req, res, next) => {
     }
   );
 };
+
+/**
+ * Get the S3 video
+ * @returns {Stream}
+ */
+export const getS3Video = (req, res, next) => {
+  s3.getObject(
+    {
+      Bucket: req.alert.video.bucket,
+      Key: req.alert.video.key,
+    },
+    (err, data) => {
+      if (err) {
+        return res.send({ error: err });
+      }
+
+      res.set('Cache-Control', 'public, max-age=31557600');
+      res.send(data.Body);
+    }
+  );
+};
