@@ -1,11 +1,17 @@
+import bcrypt from 'bcrypt';
 import User from './user.model';
+
+const saltRounds = 14;
 
 export const getUserByCredentials = (username, password) => {
   return User.findOne({ username })
-    .then(user =>
-      // console.log('u', user);
-      Promise.resolve(user.password === password ? user : false)
-    )
+    .then(async user => {
+      const match = await bcrypt.compare(password, user.password);
+      if (match) {
+        return user;
+      }
+      return false;
+    })
     .catch(err => Promise.reject(err));
 };
 
@@ -36,15 +42,17 @@ export const get = (req, res) => {
  * @returns {User}
  */
 export const create = (req, res, next) => {
-  const user = new User({
-    username: req.body.username,
-    password: req.body.password,
-  });
+  bcrypt.hash(req.body.password, saltRounds, (err, hash) => {
+    const user = new User({
+      username: req.body.username,
+      password: hash,
+    });
 
-  user
-    .save()
-    .then(savedUser => res.json(savedUser))
-    .catch(e => next(e));
+    user
+      .save()
+      .then(savedUser => res.json(savedUser))
+      .catch(e => next(e));
+  });
 };
 
 /**

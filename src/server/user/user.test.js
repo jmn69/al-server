@@ -1,6 +1,7 @@
 import Mongoose from 'mongoose';
 import httpStatus from 'http-status';
 import request from 'supertest-as-promised';
+import bcrypt from 'bcrypt';
 import app from '../../index';
 
 jest.mock('../middleware/authenticate', () => (req, res, next) => next());
@@ -28,9 +29,13 @@ describe('## User APIs', () => {
         .post('/api/users')
         .send(user)
         .expect(httpStatus.OK)
-        .then(res => {
+        .then(async res => {
           expect(res.body.username).toEqual(user.username);
-          expect(res.body.password).toEqual(user.password);
+          const match = await bcrypt.compare(
+            user.password,
+            '$2b$14$4x5mDAm0WIFwswdsKSrS1eNiCKfwch41D0PbhNme95AFPgNp0UcOe'
+          );
+          expect(match).toEqual(true);
           user = res.body;
           done();
         })
